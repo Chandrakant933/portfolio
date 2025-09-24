@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Website</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+    html{scroll-behavior:smooth;}
+    body{background:#0d0d1a;color:#fff;line-height:1.6;}
+
+    /* Navbar */
+    nav {
+      width:100%; position:fixed; top:0; left:0; z-index:1000;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:15px 40px;
+      background:rgba(13,13,26,0.95); backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    nav .logo-container {display:flex; align-items:center; gap:10px;}
+    nav .logo {font-size:1.7rem; font-weight:700; color:#fff; letter-spacing:1px;}
+    nav ul {list-style:none; display:flex; gap:30px;}
+    nav ul li a {
+      position:relative;
+      color:#fff;
+      font-weight:500;
+      padding:5px 0;
+      transition:color 0.3s;
+      text-decoration: none;
+    }
+    nav ul li a::after {
+      content:"";
+      position:absolute; left:0; bottom:-4px;
+      width:0; height:2px;
+      background:linear-gradient(90deg,#9d4eff,#00f7ff);
+      transition:width 0.3s ease;
+      border-radius:2px;
+    }
+    nav ul li a:hover {color:#00f7ff;}
+    nav ul li a:hover::after {width:100%;}
+    nav ul li a.active {color:#00f7ff;}
+    nav ul li a.active::after {width:100%;}
+
+    .hamburger {display:none; flex-direction:column; gap:5px; cursor:pointer;}
+    .hamburger div {width:25px; height:3px; background:#fff; transition:0.3s;}
+    .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .hamburger.active div:nth-child(2) { opacity: 0; }
+    .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* Sections */
+    section{min-height:100vh; padding:100px 50px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;}
+
+    /* Home Section */
+    #home {
+      display:flex; justify-content:space-between; align-items:center;
+      background:radial-gradient(circle at top left,#1c0f45,#0d0d1a 70%);
+      padding-top:120px; gap:40px; flex-wrap:wrap;
+    }
+    #home .content {flex:1; text-align:left;}
+    #home h1 {
+      font-size:3rem;
+      background:linear-gradient(90deg,#9d4eff,#00f7ff);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      margin-bottom:20px;
+    }
+    #home p {max-width:500px; font-size:1.1rem; margin-bottom:25px;}
+    #home a button {
+      padding:12px 30px; border:none; border-radius:30px;
+      background:linear-gradient(90deg,#9d4eff,#00f7ff);
+      color:#fff; font-weight:600; cursor:pointer; transition:0.4s;
+      box-shadow:0 0 15px rgba(0,247,255,0.6);
+    }
+    #home a button:hover {
+      transform:scale(1.05);
+      box-shadow:0 0 25px rgba(0,247,255,0.9), 0 0 50px rgba(157,78,255,0.8);
+    }
+    #home .hero-img {flex:1; display:flex; justify-content:center; align-items:center;}
+    #home .hero-img img {width:100%; max-width:450px; animation:floating 4s ease-in-out infinite;}
+    @keyframes floating {0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+
+
+    /* Other Sections Gradient */
+    #about {background:linear-gradient(135deg,#141430,#0d0d1a);}
+    #tools {background:linear-gradient(135deg,#0d0d1a,#1a1a40);}
+    #projects {background:linear-gradient(135deg,#141430,#0d0d1a);}
+    #contact {background:linear-gradient(135deg,#0d0d1a,#1a1a40);}
+
+    /* Section Styling */
+    section h1 {font-size:2.5rem; margin-bottom:20px; color:#00f7ff;}
+    section p {max-width:800px; margin-bottom:20px;}
+
+    /* About Section */
+    #about .about-content {display:flex; gap:40px; flex-wrap:wrap; align-items:center; justify-content:center;}
+    #about img {width:100%; max-width:400px; border-radius:15px; box-shadow:0 0 25px rgba(0,247,255,0.4);}
+    #about .text {flex:1; min-width:250px; text-align:left;}
+
+    /* Grid */
+    .grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:25px; width:100%; max-width:1000px;}
+    .grid-item {background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; backdrop-filter:blur(10px); transition:0.4s; border:1px solid rgba(255,255,255,0.1); display:flex; flex-direction:column; align-items:center;}
+    .grid-item:hover {transform:translateY(-10px) scale(1.05); border-color:#00f7ff;}
+    .grid-item img {width:100%; max-width:250px; border-radius:10px; margin-bottom:15px;}
+    .grid-item p {font-size:0.95rem; color:#ccc; text-align:center;}
+
+    /* Contact */
+    .contact-form {max-width:600px;width:100%; margin-bottom:20px;}
+    .contact-form input,.contact-form textarea {width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05);color:#fff;}
+    .contact-form button {padding:12px 25px;border:none;border-radius:30px; background:linear-gradient(90deg,#9d4eff,#00f7ff); color:#fff;cursor:pointer;transition:0.3s; box-shadow:0 0 15px rgba(0,247,255,0.6);}
+    .contact-form button:hover {filter:brightness(1.2); transform:scale(1.05);}
+
+    .social-icons {display:flex; justify-content:center; gap:25px; margin-top:10px;}
+    .social-icons a {font-size:28px; color:#00f7ff; transition:0.3s;}
+    .social-icons a:hover {color:#9d4eff;}
+
+    /* Footer */
+    footer {text-align:center;padding:20px;background:#0b0b17;color:#aaa;}
+    footer .policy-text{color: white;}
+
+    /* Responsive */
+    @media(max-width:900px){#home {flex-direction:column-reverse; text-align:center;}#home .content {text-align:center;}#about .about-content {flex-direction:column;}#about .text {text-align:center;}}
+    @media(max-width:768px){
+      nav ul {position:fixed;top:65px;right:-100%;flex-direction:column;background:#141430;width:200px;height:100%;padding:20px;transition:0.3s;}
+      nav ul.active {right:0;}
+      .hamburger {display:flex;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo-container">
+      <div class="logo">CK</div>
+    </div>
+    <ul id="nav-links">
+      <li><a href="#home" class="active">HOME</a></li>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#tools">TOOLS</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" aria-label="Menu"><div></div><div></div><div></div></div>
+  </nav>
+
+  <!-- Home -->
+  <section id="home">
+    <div class="content">
+      <h1>Hi Welcome!<br> I am a UIUX and Web Designer...</h1>
+      <p>We explore the power of design and technology to craft seamless digital experiences, elevate brands, and create innovative, user-centered websites that engage, inspire, and transform online interactions.</p>
+      <a href="#contact"><button>Contact Me</button></a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h1>About Me</h1>
+    <div class="about-content">
+      <img src="./img/home.png" alt="About Me">
+      <div class="text">
+        <p>I am a passionate UI/UX and web designer dedicated to creating engaging, user-friendly digital experiences. I focus on user-centered design, ensuring that every interface is intuitive, accessible, and visually appealing. From wireframing and prototyping to designing interactive elements and layouts, I strive to blend functionality with aesthetics.</p>
+        <p>On the web design side, I specialize in responsive, mobile-first websites built with modern technologies like HTML, CSS, JavaScript, and frameworks like Bootstrap. I pay close attention to performance, usability, and cross-browser compatibility, creating websites that are not only beautiful but also fast and reliable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section id="tools">
+    <h1>Tools Use</h1>
+    <div class="grid">
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/174/174854.png" alt="HTML5"><p>HTML5 for structure and semantic web design.</p></div>
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/732/732190.png" alt="CSS3"><p>CSS3 for styling, animations, and responsive layouts.</p></div>
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968292.png" alt="JavaScript"><p>JavaScript for interactivity and dynamic features.</p></div>
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Figma"><p>Figma for UI/UX prototyping and collaboration.</p></div>
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670159.png" alt="Canva"><p>Canva for designing graphics and social media content.</p></div>
+      <div class="grid-item"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968672.png" alt="Bootstrap"><p>Bootstrap for responsive and modern UI components.</p></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <h1>My Projects</h1>
+    <div class="grid">
+      <div class="grid-item"><img src="./img/shoe.png" alt="Nike Shoe"><p>Nike shoe collection showcased on a website template using HTML/CSS.</p></div>
+      <div class="grid-item"><img src="./img/cold.png" alt="Coffee Shop"><p>Responsive coffee shop website using HTML, CSS & JS.</p></div>
+      <div class="grid-item"><img src="./img/weather.png" alt="Weather App"><p>Weather website with search functionality for Lucknow city.</p></div>
+      <div class="grid-item"><img src="./img/coffeeapp-removebg-preview.png" alt="Coffee App"><p>Coffee ordering app screens designed in Figma.</p></div>
+      <div class="grid-item"><img src="./img/food-removebg-preview.png" alt="Food App"><p>Food ordering app screens designed in Figma for user-friendly ordering experience.</p></div>
+      <div class="grid-item"><img src="./img/social-removebg-preview.png" alt="Social App"><p>Social app UI design in Figma showcasing profiles, explore, and messaging.</p></div>
+      <div class="grid-item"><img src="./img/nikelanding.png" alt="Nike Landing"><p>Nike-inspired website design in Figma with product showcase and navigation.</p></div>
+      <div class="grid-item"><img src="./img/hungry.png" alt="Food Hunt"><p>Food website design using Figma and Canva for graphics with "Order Now" buttons.</p></div>
+      <div class="grid-item"><img src="./img/uilanding.png" alt="UI/UX Agency"><p>UI/UX Agency app design in Figma, focusing on interactive and user-friendly digital products.</p></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h1>Contact Me</h1>
+    <p>"Get in touch & feel free to connect with me"</p>
+    <!-- <form class="contact-form" id="contactForm">
+      <input type="text" name="from_name" placeholder="Your Name" required>
+      <input type="email" name="reply_to" placeholder="Your Email" required>
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form> -->
+    <div class="social-icons">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=chandrakant27012000@gmail.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://www.linkedin.com/in/chandra-kanta-sahoo-4360aa308?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BpGEifnTRTLm1v18zS74s0A%3D%3D" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+       <a href="https://www.behance.net/princechandan" target="_blank" class="behance" title="Behance">
+      <i class="fa-brands fa-behance"></i>
+    </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>&copy; 2025 Designed By Chandrakant Sahoo
+    <p class="policy-text">
+      <a href="mailto:chandrakant27012000@gmail.com" class="policy-link">Contact:- chandrakant27012000@gmail.com</a>
+    </p>
+  </footer>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function(){emailjs.init("YOUR_PUBLIC_KEY");})(); // Replace with your Public Key
+
+    const hamburger=document.getElementById('hamburger');
+    const navLinks=document.getElementById('nav-links');
+    const links=document.querySelectorAll('nav ul li a');
+
+    hamburger.addEventListener('click', ()=>{
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+    });
+
+    links.forEach(link=>{
+      link.addEventListener('click', ()=>{
+        navLinks.classList.remove('active');
+        hamburger.classList.remove('active');
+        links.forEach(a=>a.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    window.addEventListener('scroll', ()=>{
+      const sections=document.querySelectorAll('section');
+      let scrollPos=window.scrollY + 120;
+      sections.forEach(section=>{
+        if(scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight){
+          links.forEach(a=>a.classList.remove('active'));
+          document.querySelector(`nav ul li a[href="#${section.id}"]`).classList.add('active');
+        }
+      });
+    });
+
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      emailjs.sendForm('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID', this)
+        .then(() => { alert('✅ Message sent successfully!'); form.reset(); })
+        .catch(err => { alert('❌ Oops! Something went wrong.'); console.error(err); });
+    });
+  </script>
+</body>
+</html>
